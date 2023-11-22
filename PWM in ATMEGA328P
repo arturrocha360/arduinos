@@ -1,0 +1,21 @@
+#define F_CPU 1600000UL 
+#include <avr/io.h> 
+#include <util/delay.h>
+
+
+int main(void)
+ { 
+   
+   DDRD = 0xFF;//atribuindo se é entrada ou saida
+   TCCR0A = 0b10100011;
+   TCCR0B = 0b00000001;
+   OCR0A = 128;
+  
+   
+   
+   while (1){
+    
+   OCR0A+=10;
+   _delay_ms(50);
+  }
+ }
