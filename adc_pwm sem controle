@@ -1,0 +1,38 @@
+#define F_CPU 1600000UL 
+#include <avr/io.h> 
+#include <util/delay.h>
+#include <avr/interrupt.h> 
+
+volatile unsigned int resultado_ad;
+
+ISR(ADC_vect){ // valor de ADC toda vez que a conversão estiver completa
+  
+  resultado_ad = int ADC;
+  
+  }
+
+int main(void)
+ { 
+   
+   ADMUX = 0b01000000; //configurando leitura no pino 0 e comparação com tensao de alimentação
+   ADCSRA = 0b10001111; //prescale de 128 e ligar o conversor ad
+   DDRD=  0b11111111; // coloca todos os pino de portd como saída
+  
+   sei();// habilita a interrupção
+   
+   
+   
+   TCCR0A = 0b10100011;
+   TCCR0B = 0b00000001;
+   OCR0A = 128;
+  
+   
+   
+   while (1){
+    ADCSRA |= 0b01000000; // abilita a conversão
+   
+    OCR0A = (resultado_ad/4); //conversao de 10bits para 8 bits para ajustar pwm
+      
+   
+  }
+ }
